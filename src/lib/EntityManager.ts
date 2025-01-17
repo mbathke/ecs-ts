@@ -1,5 +1,6 @@
-import { Entity, Signature } from "../types";
 import { MAX_ENTITIES } from "./contants";
+import { Entity, Signature } from "../types";
+import { assert } from "./utils";
 
 export class EntityManager {
     // Queue of unused entity ID's
@@ -19,5 +20,10 @@ export class EntityManager {
         for (let entity: Entity = 0; entity < MAX_ENTITIES; ++entity) {
             this.availableEntities.push(entity)
         }
+    }
+
+    createEntity(): Entity {
+        assert(this.livingEntityCount < MAX_ENTITIES, 'Too many entities in existence.') 
+        return 0
     }
 }
