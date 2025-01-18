@@ -22,8 +22,42 @@ export class EntityManager {
         }
     }
 
+    /**
+     * Creates a new entity from a list of available entities and returns it.
+     */
     createEntity(): Entity {
         assert(this.livingEntityCount < MAX_ENTITIES, 'Too many entities in existence.') 
-        return 0
+        const entity = this.availableEntities.shift() 
+        assert(entity !== undefined, 'No new entities available.')
+        ++this.livingEntityCount
+        return entity 
+    }
+
+    /**
+     * Destroys the given entity and puts its ID back to the available entities.
+     */
+    destroyEntity(entity: Entity): void {
+        assert(entity < MAX_ENTITIES, 'Entity out of range.') 
+        this.signatures.delete(entity)
+        this.availableEntities.push(entity)
+        --this.livingEntityCount
+    }
+
+    /**
+     * Sets a signatue for the given Entity.
+     */
+    setSignature(entity: Entity, signature: Signature): void {
+        assert(entity < MAX_ENTITIES, 'Entity out of range.') 
+        this.signatures.set(entity, signature)
+    }
+
+    /**
+     * Get an entity's signature.
+     */
+    getSignature(entity: Entity): Signature {
+        assert(entity < MAX_ENTITIES, 'Entity out of range.') 
+        const signature = this.signatures.get(entity)
+        assert(signature !== undefined, 'Entity not found')
+        return signature
     }
 }
